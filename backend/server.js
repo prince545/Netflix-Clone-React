@@ -24,17 +24,9 @@
 //     console.log('Server running on port 5000'));
 //DlHbODinEIUQp0Jd
 import express from "express";
-import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
-import path from "path";
-import { fileURLToPath } from "url";
 import authRoute from "./routes/auth.route.js";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// 👇 FORCE dotenv to load backend/.env
-dotenv.config({ path: path.join(__dirname, ".env") });
+import { ENV_VARS } from './config/envVars.js';
 
 const app = express();
 app.use(express.json());
@@ -43,14 +35,17 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/v1/auth", authRoute);
 
-const PORT = process.env.PORT || 5000;
-
 const startServer = async () => {
-  await connectDB();
-
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
-  });
+  try {
+    await connectDB();
+    app.listen(ENV_VARS.PORT, () => {
+      console.log(`🚀 Server running on port ${ENV_VARS.PORT}`);
+      console.log(`Environment: ${ENV_VARS.NODE_ENV}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
 };
 
 startServer();
