@@ -3,15 +3,15 @@ import { subscription,login,logout,signin,signup } from '../controllers/auth.con
 
 const   router = express.Router();
 
-router.get('/signup', signup);
+router.post('/signup', signup);
 
-router.get('/signin', signin);
+router.post('/signin', signin);
 
-router.get('/login', login);
+router.post('/login', login);
 
-router.get('/logout', logout);
+router.post('/logout', logout);
 
 
-router.get('/subscription', subscription);
+router.post('/subscription', subscription);
 
 export default router;
